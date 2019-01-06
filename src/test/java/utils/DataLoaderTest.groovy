@@ -1,7 +1,6 @@
 package utils
 
 import spock.lang.Specification
-
 import java.awt.Point
 
 class DataLoaderTest extends Specification {
