@@ -1,0 +1,20 @@
+# Intellij Idea project files
+.idea
+*.iml
+*.ipr
+*.iws
+
+# gradle config
+.gradle
+
+# project binaries
+build
+target
+out
+classes
+
+# mac os x
+.DS_Store
+
+# checkstyle, findbugs, pmd
+/config
