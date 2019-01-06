@@ -15,6 +15,8 @@ public class PointsVisualizer {
     private static int FRAME_HEIGHT = 600;
     private static int FRAME_X_POS = 260;
     private static int FRAME_Y_POS = 150;
+    private static int FRAME_X_BOUND = 70;
+    private static int FRAME_Y_BOUND = 70;
     private static int POINT_WIDTH = 8;
     private static int POINT_HEIGHT = 8;
 
@@ -40,23 +42,39 @@ public class PointsVisualizer {
         @Override
         public void paint(Graphics g) {
             printPointAndLine(g, firstPointsList, Color.RED);
+            printPathLength(g, firstPointsList, Color.RED, 10, 20);
             printPointAndLine(g, secondPointsList, Color.BLUE);
+            printPathLength(g, secondPointsList, Color.BLUE, 100, 20);
         }
     }
 
-    private void printPointAndLine(Graphics g, List<Point> points, Color color) {
-        final Point[] prevPoint = {points.get(0)};
-        int fixPos = POINT_WIDTH / 2;
+    private void printPathLength(Graphics g, List<Point> points, Color color, int x, int y) {
+        g.setColor(color);
+        String text = String.format("%.2f", PathLength.getTotalPathLength(points));
+        g.drawString(text, x, y);
+    }
 
-        points.forEach(point -> {
-            g.setColor(Color.BLACK);
+    private void printPointAndLine(Graphics g, List<Point> points, Color color) {
+        Point prevPoint = points.get(0);
+        int fixPos = POINT_WIDTH / 2;
+        int cnt = 0;
+        for(Point point: points) {
+            g.setColor(Color.magenta);
+            if(cnt > 0)
+                g.setColor(Color.BLACK);
             Point scaledPoint = scalePoint(point);
+            if(scaledPoint.x >= FRAME_WIDTH || scaledPoint.y >= FRAME_HEIGHT) {
+                System.out.println(scaledPoint);
+            }
             g.fillOval(scaledPoint.x, scaledPoint.y, POINT_WIDTH, POINT_HEIGHT);
-            g.setColor(color);
-            g.drawLine(prevPoint[0].x + fixPos, prevPoint[0].y + fixPos,
-                    scaledPoint.x + fixPos, scaledPoint.y + fixPos);
-            prevPoint[0] = scaledPoint;
-        });
+            if(cnt > 0) {
+                g.setColor(color);
+                g.drawLine(prevPoint.x + fixPos, prevPoint.y + fixPos,
+                        scaledPoint.x + fixPos, scaledPoint.y + fixPos);
+            }
+            prevPoint = scaledPoint;
+            cnt++;
+        }
     }
 
     private Point findBound(List<Point> points) {
@@ -70,8 +88,8 @@ public class PointsVisualizer {
         list.addAll(firstPointsList);
         list.addAll(secondPointsList);
         Point bound = findBound(list);
-        int scaleX = (int)((double)point.x / bound.x * FRAME_WIDTH);
-        int scaleY = (int)((double)point.y / bound.y * FRAME_HEIGHT);
+        int scaleX = (int)((double)point.x / bound.x * (FRAME_WIDTH - FRAME_X_BOUND)) + FRAME_X_BOUND / 2;
+        int scaleY = (int)((double)point.y / bound.y * (FRAME_HEIGHT - FRAME_Y_BOUND)) + FRAME_Y_BOUND / 2;
         return new Point(scaleX, scaleY);
     }
 }
