@@ -13,7 +13,7 @@ public class NearestNeighbor implements PathFinder {
         result.add(points.get(0));
 
         while(result.size() != points.size()) {
-            double min = 99999999;
+            double min = Double.MAX_VALUE;
             Point focusedPoint = result.getLast();
             Point minPoint = null;
             for(Point seekPoint: points) {
