@@ -42,15 +42,17 @@ public class PointsVisualizer {
         @Override
         public void paint(Graphics g) {
             printPointAndLine(g, firstPointsList, Color.RED);
-            printPathLength(g, firstPointsList, Color.RED, 10, 20);
+            double firstPathLength = PathLength.getTotalPathLength(firstPointsList);
+            printText(g, String.format("%.2f", firstPathLength), Color.RED, 10, 20);
             printPointAndLine(g, secondPointsList, Color.BLUE);
-            printPathLength(g, secondPointsList, Color.BLUE, 100, 20);
+            double secondPathLength = PathLength.getTotalPathLength(secondPointsList);
+            printText(g, String.format("%.2f", secondPathLength), Color.BLUE, 90, 20);
+            printText(g, String.format("total=%.2f", (firstPathLength + secondPathLength)), Color.BLACK, 170, 20);
         }
     }
 
-    private void printPathLength(Graphics g, List<Point> points, Color color, int x, int y) {
+    private void printText(Graphics g, String text, Color color, int x, int y) {
         g.setColor(color);
-        String text = String.format("%.2f", PathLength.getTotalPathLength(points));
         g.drawString(text, x, y);
     }
 

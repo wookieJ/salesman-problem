@@ -2,32 +2,77 @@ package Finders;
 
 import utils.EuclideanDistance;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
 
 public class NearestNeighbor implements PathFinder {
     @Override
     public List<Point> resolvePath(List<Point> points) {
-        LinkedList<Point> result = new LinkedList<>();
-        result.add(points.get(0));
+        LinkedList<Point> resultOne = new LinkedList<>();
+        LinkedList<Point> resultTwo = new LinkedList<>();
+        resultOne.add(points.get(0));
+        resultTwo.add(points.get(1));
 
-        while(result.size() != points.size()) {
+        while(!isFull(resultOne, points) || !isFull(resultTwo, points)) {
             double min = Double.MAX_VALUE;
-            Point focusedPoint = result.getLast();
+            Point focusedPointOne = resultOne.getLast();
+            Point focusedPointTwo = resultTwo.getLast();
             Point minPoint = null;
+            boolean oneMin = true;
             for(Point seekPoint: points) {
-                double dist = EuclideanDistance.distance(focusedPoint, seekPoint);
-                if(dist < min && dist > 0 && !result.contains(seekPoint)) {
-                    min = dist;
-                    minPoint = seekPoint;
+                double distOne = EuclideanDistance.distance(focusedPointOne, seekPoint);
+                double distTwo = EuclideanDistance.distance(focusedPointTwo, seekPoint);
+                if (isMinimum(distOne, distTwo, min)) {
+                    if(containPoint(resultOne, resultTwo, seekPoint)) {
+                        if (!isFull(resultOne, points) && !isFull(resultTwo, points)) {
+                            if (distOne < distTwo) {
+                                minPoint = seekPoint;
+                                min = distOne;
+                                oneMin = true;
+                            } else if (distOne >= distTwo) {
+                                minPoint = seekPoint;
+                                min = distTwo;
+                                oneMin = false;
+                            }
+                        } else {
+                            if (isFull(resultOne, points)) {
+                                minPoint = seekPoint;
+                                min = distTwo;
+                                oneMin = false;
+                            } else if (isFull(resultTwo, points)) {
+                                minPoint = seekPoint;
+                                min = distOne;
+                                oneMin = true;
+                            }
+                        }
+                    }
                 }
+
             }
             if(minPoint != null) {
-                result.addLast(minPoint);
+                if(oneMin) {
+                    resultOne.addLast(minPoint);
+                } else {
+                    resultTwo.addLast(minPoint);
+                }
             }
         }
-        result.addLast(points.get(0));
-        return result;
+        resultOne.addLast(resultOne.get(0));
+        resultTwo.addLast(resultTwo.get(0));
+        resultOne.addAll(resultTwo);
+        return resultOne;
+    }
+
+    private boolean isMinimum(double p1, double p2, double min) {
+        return p1 < min && p1 > 0 || p2 < min && p2 > 0;
+    }
+
+    private boolean isFull(List<Point> result, List<Point> data) {
+        return result.size() >= (data.size() / 2);
+    }
+
+    private boolean containPoint(List<Point> firstList, List<Point> secondList, Point point) {
+        return !firstList.contains(point) && !secondList.contains(point);
     }
 }
