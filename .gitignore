@@ -18,5 +18,3 @@ classes
 
 # checkstyle, findbugs, pmd
 /config
-
-results.txt

@@ -5,14 +5,16 @@ import utils.EuclideanDistance;
 import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class NearestNeighbor implements PathFinder {
     @Override
-    public List<Point> resolvePath(List<Point> points) {
+    public List<Point> resolvePath(List<Point> points, int start1, int start2) {
         LinkedList<Point> resultOne = new LinkedList<>();
         LinkedList<Point> resultTwo = new LinkedList<>();
-        resultOne.add(points.get(0));
-        resultTwo.add(points.get(1));
+
+        resultOne.add(points.get(start1));
+        resultTwo.add(points.get(start2));
 
         while(!isFull(resultOne, points) || !isFull(resultTwo, points)) {
             double min = Double.MAX_VALUE;
@@ -62,6 +64,11 @@ public class NearestNeighbor implements PathFinder {
         resultTwo.addLast(resultTwo.get(0));
         resultOne.addAll(resultTwo);
         return resultOne;
+    }
+
+    private int randomIndex(List<Point> points) {
+        Random random = new Random();
+        return random.nextInt(points.size());
     }
 
     private boolean isMinimum(double p1, double p2, double min) {

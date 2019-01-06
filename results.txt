@@ -1,0 +1,42 @@
+=================================================== Half set - no decision
+Sun Jan 06 20:23:58 CET 2019
+51 red points + 51 blue points (Last is also first)
+Red path length: 22642,93
+Blue path length: 20021,85
+Total path length: 42664,79
+Execution time: PT0.004S
+=================================================== Nearest to set decision
+Sun Jan 06 22:29:27 CET 2019
+51 red points + 51 blue points (Last is also first)
+Red path length: 12851,68
+Blue path length: 17823,67
+Total path length: 30675,36
+Execution time: PT0.006S
+=================================================== Nearest to set decision
+Sun Jan 06 22:40:02 CET 2019
+76 red points + 76 blue points (Last is also first)
+Red path length: 16757,42
+Blue path length: 15473,05
+Total path length: 32230,47
+Execution time: PT0.006S
+=================================================== Random start point (1_000_000)
+Mon Jan 07 00:11:53 CET 2019
+51 red points + 51 blue points (Last is also first)
+Red path length: 10549,15
+Blue path length: 12575,94
+Total path length: 23125,09
+Execution time: PT4M0.077S
+=================================================== Every point start
+Mon Jan 07 00:15:51 CET 2019
+51 red points + 51 blue points (Last is also first)
+Red path length: 12575,94
+Blue path length: 10549,15
+Total path length: 23125,09
+Execution time: PT2.58S
+=================================================== Evey point start
+Mon Jan 07 00:16:36 CET 2019
+76 red points + 76 blue points (Last is also first)
+Red path length: 16102,38
+Blue path length: 14741,20
+Total path length: 30843,59
+Execution time: PT13.172S
