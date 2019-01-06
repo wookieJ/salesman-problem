@@ -60,7 +60,7 @@ public class PointsVisualizer {
         int cnt = 0;
         for(Point point: points) {
             g.setColor(Color.magenta);
-            if(cnt > 0)
+            if(cnt > 0 && cnt < points.size() - 1)
                 g.setColor(Color.BLACK);
             Point scaledPoint = scalePoint(point);
             if(scaledPoint.x >= FRAME_WIDTH || scaledPoint.y >= FRAME_HEIGHT) {

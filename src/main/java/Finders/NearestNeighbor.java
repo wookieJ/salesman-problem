@@ -27,6 +27,7 @@ public class NearestNeighbor implements PathFinder {
                 result.addLast(minPoint);
             }
         }
+        result.addLast(points.get(0));
         return result;
     }
 }

@@ -31,7 +31,7 @@ public class Main {
 
         double firstLength = PathLength.getTotalPathLength(KNNFirst);
         double secondLength = PathLength.getTotalPathLength(KNNSecond);
-        System.out.println(KNNFirst.size() + " red points + " + KNNSecond.size() + " blue points");
+        System.out.println(KNNFirst.size() + " red points + " + KNNSecond.size() + " blue points (Last is also first)");
         System.out.println(String.format("Red path length: %.2f", firstLength));
         System.out.println(String.format("Blue path length: %.2f", secondLength));
         System.out.println(String.format("Total path length: %.2f", (secondLength + firstLength)));
