@@ -11,7 +11,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class BruteForceSearch implements PathFinder {
-    private static final long EPOCH_NUMBER = 1_000_000;
+//    private static final long EPOCH_NUMBER = 10_000;
+    private static final long EPOCH_NUMBER = 1;
+    private static final String NAME = "Brute Force";
 
     private static Random random = new Random();
 
@@ -23,20 +25,24 @@ public class BruteForceSearch implements PathFinder {
     private static double distance;
     private static boolean whichSet;
 
-    public static double getMinDistance() {
+    public double getMinDistance() {
         return minDistance;
     }
 
-    public static double getMaxDistance() {
+    public double getMaxDistance() {
         return maxDistance;
     }
 
-    public static Paths getOptimalPaths() {
+    public Paths getOptimalPaths() {
         return optimalPaths;
     }
 
-    public static Paths getWorsePaths() {
+    public Paths getWorsePaths() {
         return worsePaths;
+    }
+
+    public String getName() {
+        return NAME;
     }
 
     @Override

@@ -7,10 +7,7 @@ import javax.swing.JFrame;
 import java.awt.Point;
 import java.awt.Graphics;
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class PointsVisualizer {
     private static final int FRAME_WIDTH = 900;
@@ -25,19 +22,25 @@ public class PointsVisualizer {
     private Paths pointList;
 
     public PointsVisualizer(Paths pointList) {
-        this.pointList = pointList;
+        this.pointList = new Paths(pointList);
     }
 
-    public void draw() {
+    public void draw(String name) {
         JFrame f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         f.setLocation(FRAME_X_POS, FRAME_Y_POS);
-        f.getContentPane().add(new ConnectedPoints());
+        f.getContentPane().add(new ConnectedPoints(name));
         f.setVisible(true);
     }
 
     private class ConnectedPoints extends JComponent {
+
+        private String name;
+
+        public ConnectedPoints(String name) {
+            this.name = name;
+        }
 
         @Override
         public void paint(Graphics g) {
@@ -48,6 +51,7 @@ public class PointsVisualizer {
             double secondPathLength = PathLength.getPathLength(pointList.getPointsTwo());
             printText(g, String.format("%.2f", secondPathLength), Color.BLUE, 90, 20);
             printText(g, String.format("total=%.2f", (firstPathLength + secondPathLength)), Color.BLACK, 170, 20);
+            printText(g, this.name, Color.BLACK, 450, 20);
         }
     }
 
@@ -69,6 +73,7 @@ public class PointsVisualizer {
                 System.out.println(scaledPoint);
             }
             g.fillOval(scaledPoint.x, scaledPoint.y, POINT_WIDTH, POINT_HEIGHT);
+            printText(g, String.valueOf(cnt), Color.BLACK, scaledPoint.x, scaledPoint.y - 5);
             if(cnt > 0) {
                 g.setColor(color);
                 g.drawLine(prevPoint.x + fixPos, prevPoint.y + fixPos,

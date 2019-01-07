@@ -5,11 +5,10 @@ import utils.EuclideanDistance;
 import utils.PathLength;
 
 import java.awt.Point;
-import java.nio.file.Path;
-import java.util.Date;
 import java.util.List;
 
 public class NearestNeighbor implements PathFinder {
+    private static final String NAME = "Nearest Neighbor";
 
     private Paths results = new Paths();
     private Paths optimalPath = new Paths();
@@ -36,6 +35,10 @@ public class NearestNeighbor implements PathFinder {
 
     public double getMaxDistance() {
         return maxDistance;
+    }
+
+    public static String getName() {
+        return NAME;
     }
 
     @Override

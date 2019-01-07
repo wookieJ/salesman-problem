@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.Point;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -78,5 +79,42 @@ public class Paths {
 
     public void addFirstPointToLastTwo() {
         pointsTwo.addLast(pointsTwo.getFirst());
+    }
+
+    public void switchPoints(int p1, int p2) {
+        Point pointOne = pointsOne.get(p1);
+        pointsOne.set(p1, pointsTwo.get(p2));
+        pointsTwo.set(p2, pointOne);
+    }
+
+    public void switchArcsOne(int p1, int p2) {
+        if(p1 > p2) {
+            int cpy = p1;
+            p1 = p2;
+            p2 = cpy;
+        }
+        List<Point> arc = pointsOne.subList(p1, p2 + 1);
+        Collections.reverse(arc);
+        int idx = 0;
+        for(int i=p1 ; i<p2 ; i++) {
+            pointsOne.set(i, arc.get(idx));
+            idx++;
+        }
+    }
+
+    public void switchArcsTwo(int p1, int p2) {
+        int cpy;
+        if(p1 > p2) {
+            cpy = p1;
+            p1 = p2;
+            p2 = cpy;
+        }
+        List<Point> arc = pointsTwo.subList(p1, p2 + 1);
+        Collections.reverse(arc);
+        int idx = 0;
+        for(int i=p1 ; i<p2 ; i++) {
+            pointsTwo.set(i, arc.get(idx));
+            idx++;
+        }
     }
 }

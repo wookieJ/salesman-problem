@@ -1,4 +1,5 @@
 import Finders.BruteForceSearch;
+import Finders.LocalSearch;
 import Finders.NearestNeighbor;
 import model.Paths;
 import utils.DataLoader;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        List<Point> list = DataLoader.loadPoints("kroa150.tsp");
+        List<Point> list = DataLoader.loadPoints("kroa100.tsp");
 
         Instant t1 = Instant.now();
         NearestNeighbor nearestNeighbor = new NearestNeighbor();
@@ -27,10 +28,16 @@ public class Main {
         bruteForceSearch.printStatistics();
         System.out.println("Execution time: " + Duration.between(t1Brute, t2Brute));
 
+        LocalSearch localSearch = new LocalSearch(bruteForcePaths);
+        Paths localSearchPaths = localSearch.resolvePath();
+
         PointsVisualizer nnVis = new PointsVisualizer(nearestNeighborPaths);
-        nnVis.draw();
+        nnVis.draw(nearestNeighbor.getName());
 
         PointsVisualizer bruteVis = new PointsVisualizer(bruteForcePaths);
-        bruteVis.draw();
+        bruteVis.draw(bruteForceSearch.getName());
+
+        PointsVisualizer localSearchVis = new PointsVisualizer(localSearchPaths);
+        localSearchVis.draw(localSearch.getName());
     }
 }
