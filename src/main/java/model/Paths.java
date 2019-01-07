@@ -1,0 +1,58 @@
+package model;
+
+import java.awt.Point;
+import java.util.LinkedList;
+import java.util.List;
+
+public class Paths {
+    private LinkedList<Point> pointsOne = new LinkedList<>();
+    private LinkedList<Point> pointsTwo = new LinkedList<>();
+
+    public List<Point> getPointsOne() {
+        return pointsOne;
+    }
+
+    public void setPointsOne(LinkedList<Point> pointsOne) {
+        this.pointsOne = pointsOne;
+    }
+
+    public List<Point> getPointsTwo() {
+        return pointsTwo;
+    }
+
+    public void setPointsTwo(LinkedList<Point> pointsTwo) {
+        this.pointsTwo = pointsTwo;
+    }
+
+    public boolean addToOne(Point point) {
+        return pointsOne.add(point);
+    }
+
+    public boolean addToTwo(Point point) {
+        return pointsTwo.add(point);
+    }
+
+    public void addLastToOne(Point point) {
+        pointsOne.addLast(point);
+    }
+
+    public void addLastToTwo(Point point) {
+        pointsTwo.addLast(point);
+    }
+
+    public Point getFirstFromOne() {
+        return pointsOne.getFirst();
+    }
+
+    public Point getFirstFromTwo() {
+        return pointsTwo.getFirst();
+    }
+
+    public void addAllToOne(List<Point> points) {
+        pointsOne.addAll(points);
+    }
+
+    public void addAllToTwo(List<Point> points) {
+        pointsTwo.addAll(points);
+    }
+}
