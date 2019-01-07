@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        List<Point> list = DataLoader.loadPoints("kroa100.tsp");
+        List<Point> list = DataLoader.loadPoints("kroa150.tsp");
 
         Instant t1 = Instant.now();
         NearestNeighbor nearestNeighbor = new NearestNeighbor();

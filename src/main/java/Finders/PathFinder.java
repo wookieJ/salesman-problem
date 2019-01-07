@@ -35,10 +35,10 @@ public interface PathFinder {
     }
 
     static void stat(Paths optimalPaths, double minDistance, double maxDistance) {
-        System.out.println("===================================================");
+        System.out.println("=========================================================");
         System.out.println(new Date());
         System.out.println(optimalPaths.getPointsOne().size() + " red points + " +
-                optimalPaths.getPointsTwo().size() + " blue points (Last is also first)");
+                optimalPaths.getPointsTwo().size() + " blue points (Last point is also first)");
         System.out.println("Optimal path length: " + minDistance);
         System.out.println("Worse path length: " + maxDistance);
     }

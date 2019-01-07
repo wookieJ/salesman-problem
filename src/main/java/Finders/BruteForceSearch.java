@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class BruteForceSearch implements PathFinder {
-    private static final long EPOCH_NUMBER = 10_000_000;
+    private static final long EPOCH_NUMBER = 1_000_000;
 
     private static Random random = new Random();
 
