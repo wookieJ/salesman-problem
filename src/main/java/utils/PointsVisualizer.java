@@ -1,5 +1,7 @@
 package utils;
 
+import model.Paths;
+
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import java.awt.Point;
@@ -11,21 +13,19 @@ import java.util.List;
 import java.util.Optional;
 
 public class PointsVisualizer {
-    private static int FRAME_WIDTH = 900;
-    private static int FRAME_HEIGHT = 600;
-    private static int FRAME_X_POS = 260;
-    private static int FRAME_Y_POS = 150;
-    private static int FRAME_X_BOUND = 70;
-    private static int FRAME_Y_BOUND = 70;
-    private static int POINT_WIDTH = 8;
-    private static int POINT_HEIGHT = 8;
+    private static final int FRAME_WIDTH = 900;
+    private static final int FRAME_HEIGHT = 600;
+    private static final int FRAME_X_POS = 260;
+    private static final int FRAME_Y_POS = 150;
+    private static final int FRAME_X_BOUND = 70;
+    private static final int FRAME_Y_BOUND = 70;
+    private static final int POINT_WIDTH = 8;
+    private static final int POINT_HEIGHT = 8;
 
-    private List<Point> firstPointsList;
-    private List<Point> secondPointsList;
+    private Paths pointList;
 
-    public PointsVisualizer(List<Point> firstPointsSet, List<Point> secondPointsSet) {
-        this.firstPointsList = firstPointsSet;
-        this.secondPointsList = secondPointsSet;
+    public PointsVisualizer(Paths pointList) {
+        this.pointList = pointList;
     }
 
     public void draw() {
@@ -41,11 +41,11 @@ public class PointsVisualizer {
 
         @Override
         public void paint(Graphics g) {
-            printPointAndLine(g, firstPointsList, Color.RED);
-            double firstPathLength = PathLength.getTotalPathLength(firstPointsList);
+            printPointAndLine(g, pointList.getPointsOne(), Color.RED);
+            double firstPathLength = PathLength.getPathLength(pointList.getPointsOne());
             printText(g, String.format("%.2f", firstPathLength), Color.RED, 10, 20);
-            printPointAndLine(g, secondPointsList, Color.BLUE);
-            double secondPathLength = PathLength.getTotalPathLength(secondPointsList);
+            printPointAndLine(g, pointList.getPointsTwo(), Color.BLUE);
+            double secondPathLength = PathLength.getPathLength(pointList.getPointsTwo());
             printText(g, String.format("%.2f", secondPathLength), Color.BLUE, 90, 20);
             printText(g, String.format("total=%.2f", (firstPathLength + secondPathLength)), Color.BLACK, 170, 20);
         }
@@ -87,8 +87,8 @@ public class PointsVisualizer {
 
     private Point scalePoint(Point point) {
         List<Point> list = new ArrayList<>();
-        list.addAll(firstPointsList);
-        list.addAll(secondPointsList);
+        list.addAll(pointList.getPointsOne());
+        list.addAll(pointList.getPointsTwo());
         Point bound = findBound(list);
         int scaleX = (int)((double)point.x / bound.x * (FRAME_WIDTH - FRAME_X_BOUND)) + FRAME_X_BOUND / 2;
         int scaleY = (int)((double)point.y / bound.y * (FRAME_HEIGHT - FRAME_Y_BOUND)) + FRAME_Y_BOUND / 2;

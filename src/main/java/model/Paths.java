@@ -8,6 +8,14 @@ public class Paths {
     private LinkedList<Point> pointsOne = new LinkedList<>();
     private LinkedList<Point> pointsTwo = new LinkedList<>();
 
+    public Paths() {
+    }
+
+    public Paths(Paths paths) {
+        this.pointsOne = new LinkedList<>(paths.getPointsOne());
+        this.pointsTwo = new LinkedList<>(paths.getPointsTwo());
+    }
+
     public List<Point> getPointsOne() {
         return pointsOne;
     }
@@ -54,5 +62,21 @@ public class Paths {
 
     public void addAllToTwo(List<Point> points) {
         pointsTwo.addAll(points);
+    }
+
+    public Point getLastFromOne() {
+        return pointsOne.getLast();
+    }
+
+    public Point getLastFromTwo() {
+        return pointsTwo.getLast();
+    }
+
+    public void addFirstPointToLastOne() {
+        pointsOne.addLast(pointsOne.getFirst());
+    }
+
+    public void addFirstPointToLastTwo() {
+        pointsTwo.addLast(pointsTwo.getFirst());
     }
 }
