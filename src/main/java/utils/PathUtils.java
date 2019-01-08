@@ -12,23 +12,27 @@ public class PathUtils {
         points.set(p2, pointOne);
     }
 
-    public static void switchArcs(List<Point> points, int p1, int p2) {
+    public static List<Point> reverse(List<Point> points, int p1, int p2) {
         if(p1 > p2) {
-            int cpy = p1;
+            int tmp = p2;
             p1 = p2;
-            p2 = cpy;
+            p2 = tmp;
         }
-        List<Point> arc = null;
-        try {
-            arc = points.subList(p1, p2 + 1);
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("HERE");
-        }
+        List<Point> arc = points.subList(p1+1, p2);
         Collections.reverse(arc);
         int idx = 0;
-        for(int i=p1 ; i<p2 ; i++) {
+        for(int i=p1+1 ; i<p2 ; i++) {
             points.set(i, arc.get(idx));
             idx++;
         }
+        return points;
+    }
+
+    public static List<Point> switchArcs(List<Point> points, int p1, int p2) {
+        if(p1 + 1 < p2) {
+            switchPoints(points, p1 + 1, p2);
+            reverse(points, p1+1, p2);
+        }
+        return points;
     }
 }

@@ -49,17 +49,23 @@ public class LocalSearch implements PathFinder {
 
     @Override
     public Paths resolvePath() {
-        basePath.setPointsOne((LinkedList<Point>)resolveOnePath(basePath.getPointsOne()));
-        basePath.setPointsTwo((LinkedList<Point>)resolveOnePath(basePath.getPointsTwo()));
+        basePath.setPointsOne((LinkedList<Point>) resolveOnePathPoints(basePath.getPointsOne()));
+        basePath.setPointsTwo((LinkedList<Point>) resolveOnePathPoints(basePath.getPointsTwo()));
 
+        basePath.setPointsOne((LinkedList<Point>) resolveOnePathArcs(basePath.getPointsOne()));
+        basePath.setPointsTwo((LinkedList<Point>) resolveOnePathArcs(basePath.getPointsTwo()));
+
+        setMinDistance(PathLength.getTotalPathLength(basePath));
+//        PathUtils.switchPoints(basePath.getPointsOne(), 32, 34);
         return basePath;
     }
 
-    private List<Point> resolveOnePath(List<Point> points) {
+    private List<Point> resolveOnePathPoints(List<Point> points) {
         boolean isImproved = false;
         double bestDistance;
         do {
-            startAlgorithm: {
+            startAlgorithm:
+            {
                 List<Point> swappedList = new LinkedList<>(points);
                 bestDistance = PathLength.getPathLength(points);
                 for (int i = 1; i < swappedList.size(); i++) {
@@ -68,8 +74,8 @@ public class LocalSearch implements PathFinder {
                         double newDistance = PathLength.getPathLength(swappedList);
                         isImproved = false;
                         if (newDistance < bestDistance) {
-                            points = swappedList;
                             isImproved = true;
+                            points = swappedList;
                             break startAlgorithm;
                         } else if (newDistance > getMaxDistance()) {
                             setMaxDistance(newDistance);
@@ -77,15 +83,41 @@ public class LocalSearch implements PathFinder {
                     }
                 }
             }
-        } while(isImproved);
+        } while (isImproved);
 
-        setMinDistance(bestDistance);
+        return points;
+    }
+
+    private List<Point> resolveOnePathArcs(List<Point> points) {
+        boolean isImproved = false;
+        double bestDistance;
+        do {
+            startAlgorithm:
+            {
+                List<Point> swappedListArc = new LinkedList<>(points);
+                bestDistance = PathLength.getPathLength(points);
+                for (int i = 1; i < swappedListArc.size(); i++) {
+                    for (int j = i + 1; j < swappedListArc.size() - 1; j++) {
+                        swappedListArc = PathUtils.switchArcs(swappedListArc, i, j);
+                        double newDistanceArc = PathLength.getPathLength(swappedListArc);
+                        isImproved = false;
+                        if (newDistanceArc < bestDistance) {
+                            isImproved = true;
+                            points = swappedListArc;
+                            break startAlgorithm;
+                        } else if (newDistanceArc > getMaxDistance()) {
+                            setMaxDistance(newDistanceArc);
+                        }
+                    }
+                }
+            }
+        } while (isImproved);
 
         return points;
     }
 
     public void printStatistics() {
         PathFinder.stat(basePath, getMinDistance(), getMaxDistance());
-        System.out.println(String.format("Upgrade ratio = %.2f", (pathFinder.getMinDistance()/getMinDistance())));
+        System.out.println(String.format("Upgrade ratio = %.2f", (pathFinder.getMinDistance() / getMinDistance())));
     }
 }

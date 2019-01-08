@@ -31,6 +31,12 @@ public class Main {
     }
 
     private static void runAlgorithm(PathFinder pathFinder) {
+        System.out.println("=========================================================");
+        String title = pathFinder.getName();
+        if(pathFinder instanceof LocalSearch) {
+            title += " (" + ((LocalSearch) pathFinder).getPathFinder().getName() + ")";
+        }
+        System.out.println(title);
         Instant t1 = Instant.now();
         Paths optimalPath = pathFinder.resolvePath();
         Instant t2 = Instant.now();
@@ -38,10 +44,6 @@ public class Main {
         System.out.println("Execution time: " + Duration.between(t1, t2));
 
         PointsVisualizer visualizer = new PointsVisualizer(optimalPath);
-        String title = pathFinder.getName();
-        if(pathFinder instanceof LocalSearch) {
-            title += " (" + ((LocalSearch) pathFinder).getPathFinder().getName() + ")";
-        }
         visualizer.draw(title);
     }
 }
