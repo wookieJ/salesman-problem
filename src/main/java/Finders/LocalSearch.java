@@ -2,6 +2,7 @@ package Finders;
 
 import model.Paths;
 import utils.PathLength;
+import utils.PathUtils;
 
 import java.awt.Point;
 
@@ -36,11 +37,11 @@ public class LocalSearch {
                     Paths switchedPointsPath = new Paths(basePath);
                     Paths switchedArcsPath = new Paths(basePath);
                     if(isStartOrEndPoint(pointA, pointB)) {
-                        switchedPointsPath.switchPoints(basePath.getPointsOne().indexOf(pointA), basePath.getPointsTwo().indexOf(pointB));
+                        PathUtils.switchPoints(switchedPointsPath.getPointsOne(), basePath.getPointsOne().indexOf(pointA), basePath.getPointsTwo().indexOf(pointB));
                         switchedPointsPathLength = PathLength.getTotalPathLength(switchedPointsPath);
-                        switchedArcsPath.switchArcsOne(basePath.getPointsOne().indexOf(pointA), basePath.getPointsTwo().indexOf(pointB));
+                        PathUtils.switchArcs(switchedArcsPath.getPointsOne(), basePath.getPointsOne().indexOf(pointA), basePath.getPointsTwo().indexOf(pointB));
                         switchedArcsPathLengthOne = PathLength.getTotalPathLength(switchedPointsPath);
-                        switchedArcsPath.switchArcsTwo(basePath.getPointsOne().indexOf(pointA), basePath.getPointsTwo().indexOf(pointB));
+                        PathUtils.switchArcs(switchedArcsPath.getPointsTwo(), basePath.getPointsOne().indexOf(pointA), basePath.getPointsTwo().indexOf(pointB));
                         switchedArcsPathLengthTwo = PathLength.getTotalPathLength(switchedPointsPath);
 
                         if(switchedPointsPathLength < switchedArcsPathLengthOne && switchedPointsPathLength < switchedArcsPathLengthTwo) {
