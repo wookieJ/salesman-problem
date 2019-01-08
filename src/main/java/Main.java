@@ -16,12 +16,18 @@ public class Main {
         List<Point> list = DataLoader.loadPoints("kroa100.tsp");
 
         NearestNeighbor nearestNeighbor = new NearestNeighbor(list);
-        BruteForceSearch bruteForceSearch = new BruteForceSearch(list);
+        BruteForceSearch bruteForceSearch = new BruteForceSearch(list, 1_000_000);
+        BruteForceSearch randomPath = new BruteForceSearch(list, 1);
+        LocalSearch localSearchRP = new LocalSearch(randomPath);
         LocalSearch localSearchBF = new LocalSearch(bruteForceSearch);
+        LocalSearch localSearchNN = new LocalSearch(nearestNeighbor);
 
         runAlgorithm(nearestNeighbor);
         runAlgorithm(bruteForceSearch);
+        runAlgorithm(randomPath);
+        runAlgorithm(localSearchRP);
         runAlgorithm(localSearchBF);
+        runAlgorithm(localSearchNN);
     }
 
     private static void runAlgorithm(PathFinder pathFinder) {
@@ -32,6 +38,10 @@ public class Main {
         System.out.println("Execution time: " + Duration.between(t1, t2));
 
         PointsVisualizer visualizer = new PointsVisualizer(optimalPath);
-        visualizer.draw(pathFinder.getName());
+        String title = pathFinder.getName();
+        if(pathFinder instanceof LocalSearch) {
+            title += " (" + ((LocalSearch) pathFinder).getPathFinder().getName() + ")";
+        }
+        visualizer.draw(title);
     }
 }

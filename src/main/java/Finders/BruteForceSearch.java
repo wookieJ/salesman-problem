@@ -11,9 +11,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class BruteForceSearch implements PathFinder {
-//    private static final long EPOCH_NUMBER = 10_000;
-    private static final long EPOCH_NUMBER = 1;
     private static final String NAME = "Brute Force";
+    private static long EPOCH_NUMBER;
 
     private List<Point> data;
 
@@ -27,12 +26,16 @@ public class BruteForceSearch implements PathFinder {
     private static double distance;
     private static boolean whichSet;
 
-    public double getMinDistance() {
-        return minDistance;
-    }
-
     public double getMaxDistance() {
         return maxDistance;
+    }
+
+    public static void setMinDistance(double minDistance) {
+        BruteForceSearch.minDistance = minDistance;
+    }
+
+    public static void setMaxDistance(double maxDistance) {
+        BruteForceSearch.maxDistance = maxDistance;
     }
 
     public Paths getOptimalPaths() {
@@ -43,14 +46,21 @@ public class BruteForceSearch implements PathFinder {
         return worsePaths;
     }
 
-    public BruteForceSearch(List<Point> data) {
+    public BruteForceSearch(List<Point> data, int epochNumber) {
         this.data = data;
+        EPOCH_NUMBER = epochNumber;
     }
 
     @Override
     public String getName() {
         return NAME;
     }
+
+    @Override
+    public double getMinDistance() {
+        return minDistance;
+    }
+
 
     @Override
     public Paths resolvePath() {
@@ -92,11 +102,11 @@ public class BruteForceSearch implements PathFinder {
             results.addFirstPointToLastTwo();
             distance = PathLength.getTotalPathLength(results);
             if(distance < minDistance) {
-                minDistance = distance;
+                setMinDistance(distance);
                 optimalPaths.setPointsOne(new LinkedList<>(results.getPointsOne()));
                 optimalPaths.setPointsTwo(new LinkedList<>(results.getPointsTwo()));
             } else if (distance > maxDistance) {
-                maxDistance = distance;
+                setMaxDistance(distance);
                 worsePaths.setPointsOne(new LinkedList<>(results.getPointsOne()));
                 worsePaths.setPointsTwo(new LinkedList<>(results.getPointsTwo()));
             }

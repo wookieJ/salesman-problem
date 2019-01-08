@@ -31,12 +31,16 @@ public class NearestNeighbor implements PathFinder {
         return worsePath;
     }
 
-    public double getMinDistance() {
-        return minDistance;
-    }
-
     public double getMaxDistance() {
         return maxDistance;
+    }
+
+    public void setMinDistance(double minDistance) {
+        this.minDistance = minDistance;
+    }
+
+    public void setMaxDistance(double maxDistance) {
+        this.maxDistance = maxDistance;
     }
 
     public NearestNeighbor(List<Point> data) {
@@ -46,6 +50,11 @@ public class NearestNeighbor implements PathFinder {
     @Override
     public String getName() {
         return NAME;
+    }
+
+    @Override
+    public double getMinDistance() {
+        return minDistance;
     }
 
     @Override
@@ -107,7 +116,7 @@ public class NearestNeighbor implements PathFinder {
                         minDistance = pathDistance;
                         optimalPath = new Paths(results);
                     } else if (pathDistance > maxDistance) {
-                        maxDistance = pathDistance;
+                        setMaxDistance(pathDistance);
                         worsePath = new Paths(results);
                     }
                 }

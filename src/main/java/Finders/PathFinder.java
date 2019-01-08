@@ -18,6 +18,8 @@ public interface PathFinder {
 
     String getName();
 
+    double getMinDistance();
+
     static int randomIndex(List<Point> points) {
         Random random = new Random();
         return random.nextInt(points.size());

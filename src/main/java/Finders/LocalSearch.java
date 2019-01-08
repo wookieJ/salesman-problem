@@ -5,13 +5,35 @@ import utils.PathLength;
 import utils.PathUtils;
 
 import java.awt.Point;
+import java.util.LinkedList;
+import java.util.List;
 
 public class LocalSearch implements PathFinder {
     private static final String NAME = "Local Search";
 
     private Paths basePath;
+    PathFinder pathFinder;
+    private double minDistance;
+    private double maxDistance;
+
+    public void setMinDistance(double minDistance) {
+        this.minDistance = minDistance;
+    }
+
+    public double getMaxDistance() {
+        return maxDistance;
+    }
+
+    public void setMaxDistance(double maxDistance) {
+        this.maxDistance = maxDistance;
+    }
+
+    public PathFinder getPathFinder() {
+        return pathFinder;
+    }
 
     public LocalSearch(PathFinder pathFinder) {
+        this.pathFinder = pathFinder;
         this.basePath = pathFinder.resolvePath();
     }
 
@@ -21,63 +43,49 @@ public class LocalSearch implements PathFinder {
     }
 
     @Override
+    public double getMinDistance() {
+        return minDistance;
+    }
+
+    @Override
     public Paths resolvePath() {
-        double delta = 0;
-        double lastMoveDelta = 0;
-        double minDelta;
-        do {
-            minDelta = Double.MAX_VALUE;
-
-            double switchedPointsPathLength;
-            double switchedArcsPathLengthOne;
-            double switchedArcsPathLengthTwo;
-
-            Paths minDeltaBestMove = new Paths(basePath);
-
-            for(Point pointA: basePath.getPointsOne()) {
-                for(Point pointB: basePath.getPointsOne()) {
-                    Paths switchedPointsPath = new Paths(basePath);
-                    Paths switchedArcsPath = new Paths(basePath);
-                    if(isStartOrEndPoint(pointA, pointB)) {
-                        PathUtils.switchPoints(switchedPointsPath.getPointsOne(), basePath.getPointsOne().indexOf(pointA), basePath.getPointsOne().indexOf(pointB));
-                        switchedPointsPathLength = PathLength.getTotalPathLength(switchedPointsPath);
-                        PathUtils.switchArcs(switchedArcsPath.getPointsOne(), basePath.getPointsOne().indexOf(pointA), basePath.getPointsOne().indexOf(pointB));
-                        switchedArcsPathLengthTwo = PathLength.getTotalPathLength(switchedPointsPath);
-
-                        if(switchedPointsPathLength < switchedArcsPathLengthTwo) {
-                            delta = switchedPointsPathLength - PathLength.getTotalPathLength(basePath);
-                            if(delta < minDelta) {
-                                minDelta = delta;
-                                minDeltaBestMove = switchedPointsPath;
-                            }
-                        } else {
-                            delta = switchedArcsPathLengthTwo - PathLength.getTotalPathLength(basePath);
-                            if(delta < minDelta) {
-                                minDelta = delta;
-                                minDeltaBestMove = switchedArcsPath;
-                            }
-                        }
-
-                        if(minDelta < 0) {
-                            basePath = minDeltaBestMove;
-                            lastMoveDelta = delta;
-                        }
-                    }
-                }
-            }
-        } while (lastMoveDelta < 0);
+        basePath.setPointsOne((LinkedList<Point>)resolveOnePath(basePath.getPointsOne()));
+        basePath.setPointsTwo((LinkedList<Point>)resolveOnePath(basePath.getPointsTwo()));
 
         return basePath;
     }
 
-    private boolean isStartOrEndPoint(Point pointA, Point pointB) {
-        return basePath.getPointsOne().indexOf(pointA) != 0 &&
-                basePath.getPointsTwo().indexOf(pointB) != 0 &&
-                basePath.getPointsOne().indexOf(pointA) != basePath.getPointsOne().size() - 1 &&
-                basePath.getPointsTwo().indexOf(pointB) != basePath.getPointsTwo().size() - 1;
+    private List<Point> resolveOnePath(List<Point> points) {
+        boolean isImproved = false;
+        double bestDistance;
+        do {
+            startAlgorithm: {
+                List<Point> swappedList = new LinkedList<>(points);
+                bestDistance = PathLength.getPathLength(points);
+                for (int i = 1; i < swappedList.size(); i++) {
+                    for (int j = i + 1; j < swappedList.size() - 1; j++) {
+                        PathUtils.switchPoints(swappedList, i, j);
+                        double newDistance = PathLength.getPathLength(swappedList);
+                        isImproved = false;
+                        if (newDistance < bestDistance) {
+                            points = swappedList;
+                            isImproved = true;
+                            break startAlgorithm;
+                        } else if (newDistance > getMaxDistance()) {
+                            setMaxDistance(newDistance);
+                        }
+                    }
+                }
+            }
+        } while(isImproved);
+
+        setMinDistance(bestDistance);
+
+        return points;
     }
 
     public void printStatistics() {
-        PathFinder.stat(basePath, 0, 0);
+        PathFinder.stat(basePath, getMinDistance(), getMaxDistance());
+        System.out.println(String.format("Upgrade ratio = %.2f", (pathFinder.getMinDistance()/getMinDistance())));
     }
 }
