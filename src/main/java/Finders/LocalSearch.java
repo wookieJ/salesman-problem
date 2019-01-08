@@ -6,19 +6,21 @@ import utils.PathUtils;
 
 import java.awt.Point;
 
-public class LocalSearch {
+public class LocalSearch implements PathFinder {
     private static final String NAME = "Local Search";
 
     private Paths basePath;
 
+    public LocalSearch(PathFinder pathFinder) {
+        this.basePath = pathFinder.resolvePath();
+    }
+
+    @Override
     public String getName() {
         return NAME;
     }
 
-    public LocalSearch(Paths basePath) {
-        this.basePath = basePath;
-    }
-
+    @Override
     public Paths resolvePath() {
         double delta = 0;
         double lastMoveDelta = 0;
@@ -33,28 +35,20 @@ public class LocalSearch {
             Paths minDeltaBestMove = new Paths(basePath);
 
             for(Point pointA: basePath.getPointsOne()) {
-                for(Point pointB: basePath.getPointsTwo()) {
+                for(Point pointB: basePath.getPointsOne()) {
                     Paths switchedPointsPath = new Paths(basePath);
                     Paths switchedArcsPath = new Paths(basePath);
                     if(isStartOrEndPoint(pointA, pointB)) {
-                        PathUtils.switchPoints(switchedPointsPath.getPointsOne(), basePath.getPointsOne().indexOf(pointA), basePath.getPointsTwo().indexOf(pointB));
+                        PathUtils.switchPoints(switchedPointsPath.getPointsOne(), basePath.getPointsOne().indexOf(pointA), basePath.getPointsOne().indexOf(pointB));
                         switchedPointsPathLength = PathLength.getTotalPathLength(switchedPointsPath);
-                        PathUtils.switchArcs(switchedArcsPath.getPointsOne(), basePath.getPointsOne().indexOf(pointA), basePath.getPointsTwo().indexOf(pointB));
-                        switchedArcsPathLengthOne = PathLength.getTotalPathLength(switchedPointsPath);
-                        PathUtils.switchArcs(switchedArcsPath.getPointsTwo(), basePath.getPointsOne().indexOf(pointA), basePath.getPointsTwo().indexOf(pointB));
+                        PathUtils.switchArcs(switchedArcsPath.getPointsOne(), basePath.getPointsOne().indexOf(pointA), basePath.getPointsOne().indexOf(pointB));
                         switchedArcsPathLengthTwo = PathLength.getTotalPathLength(switchedPointsPath);
 
-                        if(switchedPointsPathLength < switchedArcsPathLengthOne && switchedPointsPathLength < switchedArcsPathLengthTwo) {
+                        if(switchedPointsPathLength < switchedArcsPathLengthTwo) {
                             delta = switchedPointsPathLength - PathLength.getTotalPathLength(basePath);
                             if(delta < minDelta) {
                                 minDelta = delta;
                                 minDeltaBestMove = switchedPointsPath;
-                            }
-                        } else if (switchedArcsPathLengthOne < switchedPointsPathLength && switchedArcsPathLengthOne < switchedArcsPathLengthTwo) {
-                            delta = switchedArcsPathLengthOne - PathLength.getTotalPathLength(basePath);
-                            if(delta < minDelta) {
-                                minDelta = delta;
-                                minDeltaBestMove = switchedArcsPath;
                             }
                         } else {
                             delta = switchedArcsPathLengthTwo - PathLength.getTotalPathLength(basePath);
@@ -71,7 +65,6 @@ public class LocalSearch {
                     }
                 }
             }
-            System.out.println(minDelta);
         } while (lastMoveDelta < 0);
 
         return basePath;
@@ -85,6 +78,6 @@ public class LocalSearch {
     }
 
     public void printStatistics() {
-
+        PathFinder.stat(basePath, 0, 0);
     }
 }

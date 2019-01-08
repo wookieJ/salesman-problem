@@ -10,6 +10,8 @@ import java.util.List;
 public class NearestNeighbor implements PathFinder {
     private static final String NAME = "Nearest Neighbor";
 
+    private List<Point> data;
+
     private Paths results = new Paths();
     private Paths optimalPath = new Paths();
     private Paths worsePath = new Paths();
@@ -37,31 +39,36 @@ public class NearestNeighbor implements PathFinder {
         return maxDistance;
     }
 
-    public static String getName() {
+    public NearestNeighbor(List<Point> data) {
+        this.data = data;
+    }
+
+    @Override
+    public String getName() {
         return NAME;
     }
 
     @Override
-    public Paths resolvePath(List<Point> points) {
-        for(int i=0; i<points.size(); i++) {
-            for (int j = 0; j < points.size(); j++) {
+    public Paths resolvePath() {
+        for(int i=0; i<data.size(); i++) {
+            for (int j = 0; j < data.size(); j++) {
                 if(i != j) {
                     results = new Paths();
-                    results.addToOne(points.get(i));
-                    results.addToTwo(points.get(j));
+                    results.addToOne(data.get(i));
+                    results.addToTwo(data.get(j));
 
-                    while (!PathFinder.isFull(results.getPointsOne(), points) || !PathFinder.isFull(results.getPointsTwo(), points)) {
+                    while (!PathFinder.isFull(results.getPointsOne(), data) || !PathFinder.isFull(results.getPointsTwo(), data)) {
                         double distance = Double.MAX_VALUE;
                         Point focusedPointOne = results.getLastFromOne();
                         Point focusedPointTwo = results.getLastFromTwo();
                         Point minPoint = null;
                         boolean oneMin = true;
-                        for (Point seekPoint : points) {
+                        for (Point seekPoint : data) {
                             double distOne = EuclideanDistance.distance(focusedPointOne, seekPoint);
                             double distTwo = EuclideanDistance.distance(focusedPointTwo, seekPoint);
                             if (PathFinder.isMinimum(distOne, distTwo, distance)) {
                                 if (PathFinder.notContainPoint(results, seekPoint)) {
-                                    if (!PathFinder.isFull(results.getPointsOne(), points) && !PathFinder.isFull(results.getPointsTwo(), points)) {
+                                    if (!PathFinder.isFull(results.getPointsOne(), data) && !PathFinder.isFull(results.getPointsTwo(), data)) {
                                         if (distOne < distTwo) {
                                             minPoint = seekPoint;
                                             distance = distOne;
@@ -72,11 +79,11 @@ public class NearestNeighbor implements PathFinder {
                                             oneMin = false;
                                         }
                                     } else {
-                                        if (PathFinder.isFull(results.getPointsOne(), points)) {
+                                        if (PathFinder.isFull(results.getPointsOne(), data)) {
                                             minPoint = seekPoint;
                                             distance = distTwo;
                                             oneMin = false;
-                                        } else if (PathFinder.isFull(results.getPointsTwo(), points)) {
+                                        } else if (PathFinder.isFull(results.getPointsTwo(), data)) {
                                             minPoint = seekPoint;
                                             distance = distOne;
                                             oneMin = true;

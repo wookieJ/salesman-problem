@@ -18,7 +18,12 @@ public class PathUtils {
             p1 = p2;
             p2 = cpy;
         }
-        List<Point> arc = points.subList(p1, p2 + 1);
+        List<Point> arc = null;
+        try {
+            arc = points.subList(p1, p2 + 1);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("HERE");
+        }
         Collections.reverse(arc);
         int idx = 0;
         for(int i=p1 ; i<p2 ; i++) {

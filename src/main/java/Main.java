@@ -1,6 +1,7 @@
 import Finders.BruteForceSearch;
 import Finders.LocalSearch;
 import Finders.NearestNeighbor;
+import Finders.PathFinder;
 import model.Paths;
 import utils.DataLoader;
 import utils.PointsVisualizer;
@@ -14,30 +15,23 @@ public class Main {
     public static void main(String[] args) {
         List<Point> list = DataLoader.loadPoints("kroa100.tsp");
 
+        NearestNeighbor nearestNeighbor = new NearestNeighbor(list);
+        BruteForceSearch bruteForceSearch = new BruteForceSearch(list);
+        LocalSearch localSearchBF = new LocalSearch(bruteForceSearch);
+
+        runAlgorithm(nearestNeighbor);
+        runAlgorithm(bruteForceSearch);
+        runAlgorithm(localSearchBF);
+    }
+
+    private static void runAlgorithm(PathFinder pathFinder) {
         Instant t1 = Instant.now();
-        NearestNeighbor nearestNeighbor = new NearestNeighbor();
-        Paths nearestNeighborPaths = nearestNeighbor.resolvePath(list);
+        Paths optimalPath = pathFinder.resolvePath();
         Instant t2 = Instant.now();
-        nearestNeighbor.printStatistics();
+        pathFinder.printStatistics();
         System.out.println("Execution time: " + Duration.between(t1, t2));
 
-        Instant t1Brute = Instant.now();
-        BruteForceSearch bruteForceSearch = new BruteForceSearch();
-        Paths bruteForcePaths = bruteForceSearch.resolvePath(list);
-        Instant t2Brute = Instant.now();
-        bruteForceSearch.printStatistics();
-        System.out.println("Execution time: " + Duration.between(t1Brute, t2Brute));
-
-        LocalSearch localSearch = new LocalSearch(bruteForcePaths);
-        Paths localSearchPaths = localSearch.resolvePath();
-
-        PointsVisualizer nnVis = new PointsVisualizer(nearestNeighborPaths);
-        nnVis.draw(nearestNeighbor.getName());
-
-        PointsVisualizer bruteVis = new PointsVisualizer(bruteForcePaths);
-        bruteVis.draw(bruteForceSearch.getName());
-
-        PointsVisualizer localSearchVis = new PointsVisualizer(localSearchPaths);
-        localSearchVis.draw(localSearch.getName());
+        PointsVisualizer visualizer = new PointsVisualizer(optimalPath);
+        visualizer.draw(pathFinder.getName());
     }
 }

@@ -15,6 +15,8 @@ public class BruteForceSearch implements PathFinder {
     private static final long EPOCH_NUMBER = 1;
     private static final String NAME = "Brute Force";
 
+    private List<Point> data;
+
     private static Random random = new Random();
 
     private static Paths optimalPaths = new Paths();
@@ -41,41 +43,46 @@ public class BruteForceSearch implements PathFinder {
         return worsePaths;
     }
 
+    public BruteForceSearch(List<Point> data) {
+        this.data = data;
+    }
+
+    @Override
     public String getName() {
         return NAME;
     }
 
     @Override
-    public Paths resolvePath(List<Point> points) {
+    public Paths resolvePath() {
         minDistance = Double.MAX_VALUE;
         for(int i=0; i<EPOCH_NUMBER; i++) {
             Paths results = new Paths();
 
-            int startIndOne = random.nextInt(points.size());
-            int startIndTwo = random.nextInt(points.size());
+            int startIndOne = random.nextInt(data.size());
+            int startIndTwo = random.nextInt(data.size());
             while(startIndOne == startIndTwo) {
-                startIndTwo = random.nextInt(points.size());
+                startIndTwo = random.nextInt(data.size());
             }
 
-            Point startPointOne = points.get(startIndOne);
-            Point startPointTwo = points.get(startIndTwo);
+            Point startPointOne = data.get(startIndOne);
+            Point startPointTwo = data.get(startIndTwo);
 
             results.addToOne(startPointOne);
             results.addToTwo(startPointTwo);
 
-            List<Integer> remainingIndexes = IntStream.rangeClosed(0, points.size() - 1).boxed().collect(Collectors.toList());
+            List<Integer> remainingIndexes = IntStream.rangeClosed(0, data.size() - 1).boxed().collect(Collectors.toList());
             remainingIndexes.remove(remainingIndexes.indexOf(startIndOne));
             remainingIndexes.remove(remainingIndexes.indexOf(startIndTwo));
 
-            while (!PathFinder.isFull(results.getPointsOne(), points) || !PathFinder.isFull(results.getPointsTwo(), points)) {
+            while (!PathFinder.isFull(results.getPointsOne(), data) || !PathFinder.isFull(results.getPointsTwo(), data)) {
                 int randomIndex = random.nextInt(remainingIndexes.size());
-                Point randomPoint = points.get(remainingIndexes.get(randomIndex));
+                Point randomPoint = data.get(remainingIndexes.get(randomIndex));
                 if (PathFinder.notContainPoint(results, randomPoint)) {
                     whichSet = random.nextBoolean();
-                    if (whichSet && !PathFinder.isFull(results.getPointsOne(), points)) {
+                    if (whichSet && !PathFinder.isFull(results.getPointsOne(), data)) {
                         results.addLastToOne(randomPoint);
                         remainingIndexes.remove(randomIndex);
-                    } else if(!whichSet && !PathFinder.isFull(results.getPointsTwo(), points)){
+                    } else if(!whichSet && !PathFinder.isFull(results.getPointsTwo(), data)){
                         results.addLastToTwo(randomPoint);
                         remainingIndexes.remove(randomIndex);
                     }

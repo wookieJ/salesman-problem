@@ -4,13 +4,19 @@ import model.Paths;
 
 import java.awt.Point;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
 public interface PathFinder {
-    Paths resolvePath(List<Point> points);
+
+    List<Point> data = new LinkedList<>();
+
+    Paths resolvePath();
 
     void printStatistics();
+
+    String getName();
 
     static int randomIndex(List<Point> points) {
         Random random = new Random();
@@ -42,4 +48,5 @@ public interface PathFinder {
         System.out.println("Optimal path length: " + minDistance);
         System.out.println("Worse path length: " + maxDistance);
     }
+
 }
