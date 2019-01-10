@@ -73,7 +73,9 @@ public class PointsVisualizer {
                 System.out.println(scaledPoint);
             }
             g.fillOval(scaledPoint.x, scaledPoint.y, POINT_WIDTH, POINT_HEIGHT);
-            printText(g, String.valueOf(cnt), Color.BLACK, scaledPoint.x, scaledPoint.y - 5);
+            if(cnt < points.size()) {
+                printText(g, String.valueOf(cnt), Color.BLACK, scaledPoint.x, scaledPoint.y - 5);
+            }
             if(cnt > 0) {
                 g.setColor(color);
                 g.drawLine(prevPoint.x + fixPos, prevPoint.y + fixPos,

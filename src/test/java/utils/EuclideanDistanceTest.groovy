@@ -18,14 +18,14 @@ class EuclideanDistanceTest extends Specification {
 
     def "Should calculate distance"() {
         given:
-        def p1 = new Point(0, 0)
-        def p2 = new Point(10, 0)
-        def p3 = new Point(0, 10)
+            def p1 = new Point(0, 0)
+            def p2 = new Point(10, 0)
+            def p3 = new Point(0, 10)
         when:
-        def distance = EuclideanDistance.distance(p1, p2)
-        def distance2 = EuclideanDistance.distance(p1, p3)
+            def distance = EuclideanDistance.distance(p1, p2)
+            def distance2 = EuclideanDistance.distance(p1, p3)
         then:
-        assert distance == 10
-        assert distance2 == 10
+            assert distance == 10
+            assert distance2 == 10
     }
 }

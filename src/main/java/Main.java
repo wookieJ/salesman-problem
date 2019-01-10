@@ -12,19 +12,24 @@ import java.time.Instant;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
-        List<Point> list = DataLoader.loadPoints("kroa100.tsp");
 
-        NearestNeighbor nearestNeighbor = new NearestNeighbor(list);
-        BruteForceSearch bruteForceSearch = new BruteForceSearch(list, 1_000_000);
-        BruteForceSearch randomPath = new BruteForceSearch(list, 1);
+    private static final String FILENAME = "kroa100.tsp";
+    private static final long BRUTE_FORCE_EPOCH_NUMBER = 1_000_000;
+
+    public static void main(String[] args) {
+        List<Point> list = DataLoader.loadPoints(FILENAME);
+
+        NearestNeighbor nearestNeighbor = new NearestNeighbor(list, "Nearest Neighbor");
+        BruteForceSearch bruteForceSearch = new BruteForceSearch(list, "Brute force", BRUTE_FORCE_EPOCH_NUMBER);
+        BruteForceSearch randomPath = new BruteForceSearch(list, "Random paths", 1);
+
         LocalSearch localSearchRP = new LocalSearch(randomPath);
         LocalSearch localSearchBF = new LocalSearch(bruteForceSearch);
         LocalSearch localSearchNN = new LocalSearch(nearestNeighbor);
 
-        runAlgorithm(nearestNeighbor);
         runAlgorithm(bruteForceSearch);
         runAlgorithm(randomPath);
+        runAlgorithm(nearestNeighbor);
         runAlgorithm(localSearchRP);
         runAlgorithm(localSearchBF);
         runAlgorithm(localSearchNN);

@@ -11,20 +11,20 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class BruteForceSearch implements PathFinder {
-    private static final String NAME = "Brute Force";
-    private static long EPOCH_NUMBER;
+    public String NAME;
+    private long EPOCH_NUMBER;
 
     private List<Point> data;
 
     private static Random random = new Random();
 
-    private static Paths optimalPaths = new Paths();
-    private static Paths worsePaths = new Paths();
+    private Paths optimalPaths = new Paths();
+    private Paths worsePaths = new Paths();
 
     private static double minDistance = Double.MAX_VALUE;
     private static double maxDistance = 0.0;
-    private static double distance;
-    private static boolean whichSet;
+    private double distance;
+    private boolean whichSet;
 
     public double getMaxDistance() {
         return maxDistance;
@@ -46,9 +46,10 @@ public class BruteForceSearch implements PathFinder {
         return worsePaths;
     }
 
-    public BruteForceSearch(List<Point> data, int epochNumber) {
+    public BruteForceSearch(List<Point> data, String title, long epochNumber) {
         this.data = data;
-        EPOCH_NUMBER = epochNumber;
+        this.EPOCH_NUMBER = epochNumber;
+        this.NAME = title;
     }
 
     @Override
@@ -65,7 +66,7 @@ public class BruteForceSearch implements PathFinder {
     @Override
     public Paths resolvePath() {
         minDistance = Double.MAX_VALUE;
-        for(int i=0; i<EPOCH_NUMBER; i++) {
+        for(int i=0; i<this.EPOCH_NUMBER; i++) {
             Paths results = new Paths();
 
             int startIndOne = random.nextInt(data.size());
@@ -101,11 +102,11 @@ public class BruteForceSearch implements PathFinder {
             results.addFirstPointToLastOne();
             results.addFirstPointToLastTwo();
             distance = PathLength.getTotalPathLength(results);
-            if(distance < minDistance) {
+            if(distance < getMinDistance()) {
                 setMinDistance(distance);
                 optimalPaths.setPointsOne(new LinkedList<>(results.getPointsOne()));
                 optimalPaths.setPointsTwo(new LinkedList<>(results.getPointsTwo()));
-            } else if (distance > maxDistance) {
+            } else if (distance > getMaxDistance()) {
                 setMaxDistance(distance);
                 worsePaths.setPointsOne(new LinkedList<>(results.getPointsOne()));
                 worsePaths.setPointsTwo(new LinkedList<>(results.getPointsTwo()));
@@ -117,5 +118,6 @@ public class BruteForceSearch implements PathFinder {
     @Override
     public void printStatistics() {
         PathFinder.stat(optimalPaths, getMinDistance(), getMaxDistance());
+        System.out.println("Tries number: " + EPOCH_NUMBER);
     }
 }

@@ -49,70 +49,36 @@ public class LocalSearch implements PathFinder {
 
     @Override
     public Paths resolvePath() {
-        basePath.setPointsOne((LinkedList<Point>) resolveOnePathPoints(basePath.getPointsOne()));
-        basePath.setPointsTwo((LinkedList<Point>) resolveOnePathPoints(basePath.getPointsTwo()));
-
-        basePath.setPointsOne((LinkedList<Point>) resolveOnePathArcs(basePath.getPointsOne()));
-        basePath.setPointsTwo((LinkedList<Point>) resolveOnePathArcs(basePath.getPointsTwo()));
+        basePath.setPointsOne(new LinkedList<>(resolveOnePathPoints2(basePath.getPointsOne())));
+        basePath.setPointsTwo(new LinkedList<>(resolveOnePathPoints2(basePath.getPointsTwo())));
 
         setMinDistance(PathLength.getTotalPathLength(basePath));
-//        PathUtils.switchPoints(basePath.getPointsOne(), 32, 34);
         return basePath;
     }
 
-    private List<Point> resolveOnePathPoints(List<Point> points) {
-        boolean isImproved = false;
-        double bestDistance;
-        do {
-            startAlgorithm:
-            {
-                List<Point> swappedList = new LinkedList<>(points);
-                bestDistance = PathLength.getPathLength(points);
-                for (int i = 1; i < swappedList.size(); i++) {
-                    for (int j = i + 1; j < swappedList.size() - 1; j++) {
-                        PathUtils.switchPoints(swappedList, i, j);
-                        double newDistance = PathLength.getPathLength(swappedList);
-                        isImproved = false;
-                        if (newDistance < bestDistance) {
-                            isImproved = true;
-                            points = swappedList;
-                            break startAlgorithm;
-                        } else if (newDistance > getMaxDistance()) {
-                            setMaxDistance(newDistance);
-                        }
+    private List<Point> resolveOnePathPoints2(List<Point> points) {
+        int size = points.size();
+        List<Point> newTour;
+        int noImproveNumber = 0;
+
+        while (noImproveNumber < 10) {
+            double bestDistance = PathLength.getPathLength(points);
+            for (int i=1; i<size - 1; i++) {
+                for (int k=i + 1; k<size - 1; k++)  {
+                    newTour = PathUtils.opt2(points, i, k);
+                    double newDistance = PathLength.getPathLength(newTour);
+                    if (newDistance < bestDistance) {
+                        bestDistance = newDistance;
+                        noImproveNumber = 0;
+                        points = new LinkedList<>(newTour);
+                    } else {
+                        setMaxDistance(newDistance);
                     }
                 }
             }
-        } while (isImproved);
-
-        return points;
-    }
-
-    private List<Point> resolveOnePathArcs(List<Point> points) {
-        boolean isImproved = false;
-        double bestDistance;
-        do {
-            startAlgorithm:
-            {
-                List<Point> swappedListArc = new LinkedList<>(points);
-                bestDistance = PathLength.getPathLength(points);
-                for (int i = 1; i < swappedListArc.size(); i++) {
-                    for (int j = i + 1; j < swappedListArc.size() - 1; j++) {
-                        swappedListArc = PathUtils.switchArcs(swappedListArc, i, j);
-                        double newDistanceArc = PathLength.getPathLength(swappedListArc);
-                        isImproved = false;
-                        if (newDistanceArc < bestDistance) {
-                            isImproved = true;
-                            points = swappedListArc;
-                            break startAlgorithm;
-                        } else if (newDistanceArc > getMaxDistance()) {
-                            setMaxDistance(newDistanceArc);
-                        }
-                    }
-                }
-            }
-        } while (isImproved);
-
+            noImproveNumber++;
+        }
+        setMinDistance(PathLength.getPathLength(points));
         return points;
     }
 
