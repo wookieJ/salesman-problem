@@ -13,4 +13,4 @@ Those paths are visualizing using java swing with total paths length.
 * Local Search consider points or edges between two graphs.
 * Add Iterated Local Search algorithm.
 * Check metrics from 10 rerun.
-
+* Cache points distance.
