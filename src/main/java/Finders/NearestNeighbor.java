@@ -11,6 +11,10 @@ import java.util.Random;
 public class NearestNeighbor implements PathFinder {
     private static String NAME;
 
+    public List<Point> getData() {
+        return data;
+    }
+
     private List<Point> data;
 
     private Paths results = new Paths();
