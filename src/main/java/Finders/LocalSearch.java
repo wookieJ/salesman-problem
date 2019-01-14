@@ -11,6 +11,8 @@ import java.util.List;
 public class LocalSearch implements PathFinder {
     private static final String NAME = "Local Search";
 
+
+
     private Paths basePath;
     PathFinder pathFinder;
     private double minDistance;
@@ -37,6 +39,14 @@ public class LocalSearch implements PathFinder {
         this.basePath = pathFinder.resolvePath();
     }
 
+    public void setBasePath(Paths basePath) {
+        this.basePath = basePath;
+    }
+
+    public Paths getBasePath() {
+        return basePath;
+    }
+
     @Override
     public String getName() {
         return NAME;
@@ -56,7 +66,7 @@ public class LocalSearch implements PathFinder {
         return basePath;
     }
 
-    private List<Point> resolveOnePathPoints2(List<Point> points) {
+    public List<Point> resolveOnePathPoints2(List<Point> points) {
         int size = points.size();
         List<Point> newTour;
         int noImproveNumber = 0;
