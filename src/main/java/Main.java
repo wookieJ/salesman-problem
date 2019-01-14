@@ -1,6 +1,8 @@
 import Finders.*;
 import model.Paths;
+import org.slf4j.spi.LocationAwareLogger;
 import utils.DataLoader;
+import utils.PathLength;
 import utils.PointsVisualizer;
 
 import java.awt.Point;
@@ -20,18 +22,40 @@ public class Main {
         BruteForceSearch bruteForceSearch = new BruteForceSearch(list, "Brute force", BRUTE_FORCE_EPOCH_NUMBER);
         BruteForceSearch randomPath = new BruteForceSearch(list, "Random paths", 1);
 
-        LocalSearch localSearchRP = new LocalSearch(randomPath);
+//        LocalSearch localSearchRP = new LocalSearch(randomPath);
 //        LocalSearch localSearchBF = new LocalSearch(bruteForceSearch);
-//        LocalSearch localSearchNN = new LocalSearch(nearestNeighbor);
-        IteratedLocalSearch iteratedLocalSearchNN = new IteratedLocalSearch(localSearchRP);
+        LocalSearch localSearchNN = new LocalSearch(nearestNeighbor);
+        IteratedLocalSearch iteratedLocalSearchNN = new IteratedLocalSearch(localSearchNN);
 
 //        runAlgorithm(bruteForceSearch);
-        runAlgorithm(randomPath);
-//        runAlgorithm(nearestNeighbor);
-        runAlgorithm(localSearchRP);
+//        runAlgorithm(randomPath);
+        runAlgorithm(nearestNeighbor);
+//        runAlgorithm(localSearchRP);
 //        runAlgorithm(localSearchBF);
-//        runAlgorithm(localSearchNN);
+        runAlgorithm(localSearchNN);
         runAlgorithm(iteratedLocalSearchNN);
+
+        double bestLengthNN = nearestNeighbor.getMinDistance();
+        LocalSearch bestNN = null;
+        Instant t1 = Instant.now();
+        for (int i = 0; i < 100; i++) {
+            nearestNeighbor = new NearestNeighbor(list, "Nearest Neighbor");
+            localSearchNN = new LocalSearch(nearestNeighbor);
+            Paths pathsNN = localSearchNN.resolvePath();
+            double pathLengthNN = PathLength.getTotalPathLength(pathsNN);
+            if(pathLengthNN < bestLengthNN) {
+                bestLengthNN = pathLengthNN;
+                bestNN = localSearchNN;
+            }
+        }
+        Instant t2 = Instant.now();
+        System.out.println("=========================================================");
+        String title = "100 uruchomień NN";
+        System.out.println(title);
+        bestNN.printStatistics();
+        PointsVisualizer pointsVisualizer = new PointsVisualizer(bestNN.getBasePath());
+        pointsVisualizer.draw(title);
+        System.out.println("Execution time: " + Duration.between(t1, t2));
     }
 
     private static void runAlgorithm(PathFinder pathFinder) {
