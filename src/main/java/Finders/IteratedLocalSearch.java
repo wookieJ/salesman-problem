@@ -40,7 +40,7 @@ public class IteratedLocalSearch implements PathFinder {
        int noImproveNumber = 0;
        LinkedList<Point> newTourOne;
 
-       while(noImproveNumber < 1000) {
+       while(noImproveNumber < 3000) {
            Paths newPath = new Paths(basePath);
            newTourOne =(LinkedList<Point>) perturbate(this.basePath.getPointsOne());
            newPath.setPointsOne(newTourOne);
@@ -68,7 +68,7 @@ public class IteratedLocalSearch implements PathFinder {
         int noImproveNumber = 0;
         LinkedList<Point> newTourOne;
 
-        while(noImproveNumber < 1000) {
+        while(noImproveNumber < 3000) {
             Paths newPath = new Paths(basePath);
             newTourOne =(LinkedList<Point>) perturbate(this.basePath.getPointsTwo());
             newPath.setPointsTwo(newTourOne);
