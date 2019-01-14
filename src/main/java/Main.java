@@ -1,7 +1,4 @@
-import Finders.BruteForceSearch;
-import Finders.LocalSearch;
-import Finders.NearestNeighbor;
-import Finders.PathFinder;
+import Finders.*;
 import model.Paths;
 import utils.DataLoader;
 import utils.PointsVisualizer;
@@ -24,15 +21,17 @@ public class Main {
         BruteForceSearch randomPath = new BruteForceSearch(list, "Random paths", 1);
 
         LocalSearch localSearchRP = new LocalSearch(randomPath);
-        LocalSearch localSearchBF = new LocalSearch(bruteForceSearch);
-        LocalSearch localSearchNN = new LocalSearch(nearestNeighbor);
+//        LocalSearch localSearchBF = new LocalSearch(bruteForceSearch);
+//        LocalSearch localSearchNN = new LocalSearch(nearestNeighbor);
+        IteratedLocalSearch iteratedLocalSearchNN = new IteratedLocalSearch(localSearchRP);
 
-        runAlgorithm(bruteForceSearch);
+//        runAlgorithm(bruteForceSearch);
         runAlgorithm(randomPath);
-        runAlgorithm(nearestNeighbor);
+//        runAlgorithm(nearestNeighbor);
         runAlgorithm(localSearchRP);
-        runAlgorithm(localSearchBF);
-        runAlgorithm(localSearchNN);
+//        runAlgorithm(localSearchBF);
+//        runAlgorithm(localSearchNN);
+        runAlgorithm(iteratedLocalSearchNN);
     }
 
     private static void runAlgorithm(PathFinder pathFinder) {

@@ -10,7 +10,8 @@ import java.util.List;
 
 public class LocalSearch implements PathFinder {
     private static final String NAME = "Local Search";
-    private static final long NUMBER_OF_NOIMPROVEMENT = 1_000;
+
+
 
     private Paths basePath;
     PathFinder pathFinder;
@@ -38,6 +39,14 @@ public class LocalSearch implements PathFinder {
         this.basePath = pathFinder.resolvePath();
     }
 
+    public void setBasePath(Paths basePath) {
+        this.basePath = basePath;
+    }
+
+    public Paths getBasePath() {
+        return basePath;
+    }
+
     @Override
     public String getName() {
         return NAME;
@@ -50,19 +59,19 @@ public class LocalSearch implements PathFinder {
 
     @Override
     public Paths resolvePath() {
-        basePath.setPointsOne(new LinkedList<>(resolveOnePathPoints(basePath.getPointsOne())));
-        basePath.setPointsTwo(new LinkedList<>(resolveOnePathPoints(basePath.getPointsTwo())));
+        basePath.setPointsOne(new LinkedList<>(resolveOnePathPoints2(basePath.getPointsOne())));
+        basePath.setPointsTwo(new LinkedList<>(resolveOnePathPoints2(basePath.getPointsTwo())));
 
         setMinDistance(PathLength.getTotalPathLength(basePath));
         return basePath;
     }
 
-    private List<Point> resolveOnePathPoints(List<Point> points) {
+    public List<Point> resolveOnePathPoints2(List<Point> points) {
         int size = points.size();
         List<Point> newTour;
         int noImproveNumber = 0;
 
-        while (noImproveNumber < NUMBER_OF_NOIMPROVEMENT) {
+        while (noImproveNumber < 10) {
             double bestDistance = PathLength.getPathLength(points);
             for (int i=1; i<size - 1; i++) {
                 for (int k=i + 1; k<size - 1; k++)  {

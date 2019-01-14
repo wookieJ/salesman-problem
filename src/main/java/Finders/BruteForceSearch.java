@@ -13,7 +13,6 @@ import java.util.stream.IntStream;
 public class BruteForceSearch implements PathFinder {
     public String NAME;
     private long EPOCH_NUMBER;
-
     private List<Point> data;
 
     private static Random random = new Random();
