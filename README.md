@@ -10,5 +10,7 @@ Those paths are visualizing using java swing with total paths length.
 ### TODO
 
 * Calculate delta function in NN algorithm as length of swapping edges instead of whole path.
-* Local Search considers points or edges to exchange between two graphs.
-
+* Local Search consider points or edges between two graphs.
+* Add Iterated Local Search algorithm.
+* Check metrics from 10 rerun.
+* Cache points distance.
