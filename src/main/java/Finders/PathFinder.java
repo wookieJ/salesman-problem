@@ -42,12 +42,13 @@ public interface PathFinder {
                 !paths.getPointsTwo().stream().anyMatch(point1 -> point1.x == point.x && point1.y == point.y);
     }
 
-    static void stat(Paths optimalPaths, double minDistance, double maxDistance) {
+    static void stat(Paths optimalPaths, double minDistance, double maxDistance, double avgDistance) {
         System.out.println(new Date());
         System.out.println(optimalPaths.getPointsOne().size() + " red points + " +
                 optimalPaths.getPointsTwo().size() + " blue points (Last point is also first)");
         System.out.println("Optimal path length: " + minDistance);
         System.out.println("Worse path length: " + maxDistance);
+        System.out.println("Avg path length: " + avgDistance);
     }
 
 }

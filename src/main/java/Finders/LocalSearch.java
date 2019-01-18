@@ -93,7 +93,7 @@ public class LocalSearch implements PathFinder {
     }
 
     public void printStatistics() {
-        PathFinder.stat(basePath, getMinDistance(), getMaxDistance());
+        PathFinder.stat(basePath, getMinDistance(), getMaxDistance(), 0);
         System.out.println(String.format("Upgrade ratio = %.2f", (pathFinder.getMinDistance() / getMinDistance())));
     }
 }

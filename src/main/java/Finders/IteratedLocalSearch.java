@@ -1,12 +1,10 @@
 package Finders;
 
 import model.Paths;
-import org.slf4j.spi.LocationAwareLogger;
 import utils.PathLength;
 import utils.PathUtils;
 
 import java.awt.Point;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Random;
@@ -110,7 +108,7 @@ public class IteratedLocalSearch implements PathFinder {
 
     @Override
     public void printStatistics() {
-        PathFinder.stat(basePath, getMinDistance(), getMaxDistance());
+        PathFinder.stat(basePath, getMinDistance(), getMaxDistance(), 0);
         System.out.println(String.format("Upgrade ratio = %.2f", (localSearch.getMinDistance() / getMinDistance())));
     }
 

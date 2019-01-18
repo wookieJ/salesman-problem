@@ -4,6 +4,7 @@ import model.Paths;
 import utils.PathLength;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -14,6 +15,7 @@ public class BruteForceSearch implements PathFinder {
     public String NAME;
     private long EPOCH_NUMBER;
     private List<Point> data;
+    private List<Double> allDistance;
 
     private static Random random = new Random();
 
@@ -22,8 +24,25 @@ public class BruteForceSearch implements PathFinder {
 
     private static double minDistance = Double.MAX_VALUE;
     private static double maxDistance = 0.0;
+
+    private double avgDistance = 0.0;
     private double distance;
     private boolean whichSet;
+
+    public double getAvgDistance() {
+        return avgDistance;
+    }
+
+    public double setAvgDistance() {
+        double sum = 0;
+        if(!allDistance.isEmpty()) {
+            for(Double distance : allDistance) {
+                sum+= distance;
+            }
+            return sum / allDistance.size();
+        }
+        return sum;
+    }
 
     public double getMaxDistance() {
         return maxDistance;
@@ -49,6 +68,7 @@ public class BruteForceSearch implements PathFinder {
         this.data = data;
         this.EPOCH_NUMBER = epochNumber;
         this.NAME = title;
+        this.allDistance = new ArrayList<>();
     }
 
     @Override
@@ -101,6 +121,7 @@ public class BruteForceSearch implements PathFinder {
             results.addFirstPointToLastOne();
             results.addFirstPointToLastTwo();
             distance = PathLength.getTotalPathLength(results);
+            allDistance.add(distance);
             if(distance < getMinDistance()) {
                 setMinDistance(distance);
                 optimalPaths.setPointsOne(new LinkedList<>(results.getPointsOne()));
@@ -111,12 +132,13 @@ public class BruteForceSearch implements PathFinder {
                 worsePaths.setPointsTwo(new LinkedList<>(results.getPointsTwo()));
             }
         }
+        avgDistance = setAvgDistance();
         return optimalPaths;
     }
 
     @Override
     public void printStatistics() {
-        PathFinder.stat(optimalPaths, getMinDistance(), getMaxDistance());
+        PathFinder.stat(optimalPaths, getMinDistance(), getMaxDistance(), getAvgDistance());
         System.out.println("Tries number: " + EPOCH_NUMBER);
     }
 }
